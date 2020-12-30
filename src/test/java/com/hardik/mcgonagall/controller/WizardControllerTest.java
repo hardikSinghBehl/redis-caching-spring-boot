@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.cache.RedisCache;
@@ -37,6 +38,9 @@ import redis.clients.jedis.Jedis;
 @Transactional
 class WizardControllerTest {
 	
+	@Value("${spring.redis.port}")
+	private Integer port;
+	
 	private RedisServer server;
 	
 	@Autowired
@@ -53,7 +57,7 @@ class WizardControllerTest {
 	
 	@BeforeEach
 	public void setUp() throws IOException {
-		server = RedisServer.newRedisServer(6969);
+		server = RedisServer.newRedisServer(port);
 		server.start();
 		new Jedis(server.getHost(), server.getBindPort());
 	}
